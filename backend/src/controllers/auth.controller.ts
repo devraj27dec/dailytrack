@@ -1,9 +1,10 @@
 import { UserSchema } from "../types/index.js";
 import type { Request, Response } from "express";
 import bcrypt  from 'bcryptjs'
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../lib/prismaClient.js";
+import { generateToken } from "../lib/jwt.js";
 
-const prisma = new PrismaClient();
+
 
 export async function registerUser (req: Request, res: Response){
     try {
@@ -61,10 +62,19 @@ export async function UserLogin(req: Request , res: Response) {
             return res.status(400).json({ msg: "Invalid email or password" });
         }
 
-        return res.status(201).json({"msg":"User LoggedIn Successfull"})
+        const token = generateToken(user.id)
+
+        return res.status(201).json({"msg":"User LoggedIn Successfull" , "access_token": token})
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
 
 
+export const googleAuthRedirect = (req: Request, res: Response) => {
+  const user = req.user as any;
+  if (!user) return res.status(401).json({ message: "Authentication failed" });
+
+  const token = generateToken(user.id);
+  return res.status(201).json({ message: "Login successful", token });
+};

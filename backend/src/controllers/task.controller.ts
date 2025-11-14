@@ -1,8 +1,6 @@
 import type { Request , Response } from "express";
 import { TaskSchema } from "../types/index.js";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prismaClient.js";
 
 export async function CreateTask(req: Request, res: Response) {
   try {
@@ -78,15 +76,13 @@ export async function  deleteTask(req: Request , res:Response) {
 
     const existingTask = await prisma.task.findUnique({ where: { id } });
 
-
     if (!existingTask) {
       return res.status(404).json({ message: "Task not found" });
     }
 
     await prisma.task.delete({ where: { id } });
-
+    
     return res.status(200).json({ message: "Task deleted successfully" });
-
   } catch (error) {
     return res.status(500).json({
     message:"Internal Server Error"
@@ -96,15 +92,11 @@ export async function  deleteTask(req: Request , res:Response) {
 
 export async function clearTaskHistory(req:Request , res:Response) {
   try {
-    
     await prisma.task.deleteMany()
-
     return res.status(201).json({"message":"Tasks Deleted successfully"})
-
   } catch (error) {
     return res.status(500).json({
     message:"Internal Server Error"
    }) 
   }  
-
 }

@@ -13,19 +13,21 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useMutation } from "@tanstack/react-query";
-import { Login } from "@/api/http";
+import { useAuth } from "@/hooks/useAuth";
 
 const SignIn = () => {
   const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { login } = useAuth();
+
   const { mutate, isPending, isError, error } = useMutation({
     mutationKey: ["login-key"],
-    mutationFn: () => Login(email, password),
+    mutationFn: login,
     onSuccess: (data) => {
       console.log("✅ Login success:", data);
-      navigate("/")
+      navigate("/dashboard")
     },
     onError: (err) => {
       console.error("❌ Login failed:", err);
@@ -34,7 +36,7 @@ const SignIn = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate();
+    mutate({ email, password });
   };
 
   const handleGoogleLogin = () => {

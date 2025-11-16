@@ -10,3 +10,7 @@ export const api = axios.create({
         "Accept":"application/json"
     }
 })
+
+export const getAuthToken = () => {
+    return localStorage.getItem('access_token') || null;
+}

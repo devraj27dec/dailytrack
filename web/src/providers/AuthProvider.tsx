@@ -1,47 +1,37 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Login } from "@/api/http";
 import { AuthContext } from "@/hooks/useAuth";
 import type { LoginCredentials } from "@/lib/type";
-import {useEffect, useState } from "react";
+import {useState } from "react";
 
 
-export const AuthProvider = ({ children }: any) => {
-  const [user, setUser] = useState<any>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(() => sessionStorage.getItem("access_token"));
+  const [username , setUsername] = useState("")
+  // const isAuthenticated = !!token;
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      setIsAuthenticated(true);
-    }
-  }, []);
-
-  const login = async (userData: LoginCredentials) => {
-    const response = await Login(userData);
-    console.log("response" , response)
-
-    if (response) {
-      // const loggedUser = response.data; 
-      // console.log("Logged in user:", loggedUser); 
-      
-      setUser(response);
-      setIsAuthenticated(true);
-
-      localStorage.setItem("access_token", response.access_token);
-    }
+  const login = async (credentials: LoginCredentials) => {
+    const response = await Login(credentials);
+    
+    setUser(response);
+    setToken(response.details.access_token);
+    setUsername(response.details.username)
+    sessionStorage.setItem("access_token", response.details.access_token);
   };
 
+
   const logout = () => {
+    console.log("User Logout Sucessfully")
     setUser(null);
-    setIsAuthenticated(false);
-    localStorage.removeItem("access_token");
+    setToken(null);
+    sessionStorage.removeItem("access_token");
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, username, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
 

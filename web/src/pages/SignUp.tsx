@@ -84,7 +84,7 @@ const SignUp = () => {
             </Button>
             <p className="text-sm text-muted-foreground text-center">
               Already have an account?{" "}
-              <Link to="/signin" className="text-primary hover:underline">
+              <Link to="/login" className="text-primary hover:underline">
                 Login
               </Link>
             </p>

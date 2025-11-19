@@ -1,10 +1,11 @@
-import { LayoutDashboard, UserPlus } from "lucide-react";
+import { ChevronUp, LayoutDashboard, User2, UserPlus } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -14,10 +15,17 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+
+import { useAuth } from "@/hooks/useAuth";
+
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  // { title: "Login", url: "/login", icon: LogIn },
-  // { title: "Register", url: "/register", icon: UserPlus },
   { title: "Profile", url: "/profile", icon: UserPlus },
 ];
 
@@ -26,12 +34,13 @@ export function AppSidebar() {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const isActive = (path: string) => currentPath === path;
-  const isExpanded = items.some((i) => isActive(i.url));
+  const {logout , username} = useAuth()
+
+  // const isActive = (path: string) => currentPath === path;
 
   return (
     <Sidebar className={open ? "w-60" : "w-14"} collapsible="icon">
-      <SidebarContent>
+      <SidebarContent className="flex flex-col h-full justify-between">
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -54,6 +63,29 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        <SidebarFooter className="border border-white rounded-full px-4">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton>
+                    <User2 /> {username}
+                    <ChevronUp className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent
+                  side="top"
+                  className="w-[--radix-popper-anchor-width]"
+                >
+                  
+                  <DropdownMenuItem onClick={() => logout()}>Sign out</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
       </SidebarContent>
     </Sidebar>
   );

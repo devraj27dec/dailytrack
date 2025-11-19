@@ -5,7 +5,6 @@ import { prisma } from "../lib/prismaClient.js";
 import { generateToken } from "../lib/jwt.js";
 
 
-
 export async function registerUser (req: Request, res: Response){
     try {
 
@@ -63,8 +62,14 @@ export async function UserLogin(req: Request , res: Response) {
         }
 
         const token = generateToken(user.id)
+        // console.log("token" , token)
 
-        return res.status(201).json({"msg":"User LoggedIn Successfull" , "access_token": token})
+        const details = {
+            "access_token": token,
+            "username": user.username
+        }
+
+        return res.status(201).json({"msg":"User LoggedIn Successfull" , "details": details})
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }
@@ -74,7 +79,6 @@ export async function UserLogin(req: Request , res: Response) {
 export const googleAuthRedirect = (req: Request, res: Response) => {
   const user = req.user as any;
   if (!user) return res.status(401).json({ message: "Authentication failed" });
-
   const token = generateToken(user.id);
   return res.status(201).json({ message: "Login successful", token });
 };

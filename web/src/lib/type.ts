@@ -8,8 +8,9 @@ export interface UserData {
 }
 
 export interface TaskData {
-    id?: number;
+    id?: string;
     title: string;
+    isCompleted?: boolean;
     description?: string;
     userId?: number;
 }   

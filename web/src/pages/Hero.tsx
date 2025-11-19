@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 // import { ThemeToggle } from "@/components/ThemeToggle";
 import { ArrowRight, CheckCircle2, Zap, Shield, Users } from "lucide-react";
+import { ModeToggle } from "@/components/theme-toggle";
 
 const Hero = () => {
   return (
@@ -11,6 +12,7 @@ const Hero = () => {
           <h1 className="text-2xl font-bold">DailyTrack</h1>
           <div className="flex items-center gap-4">
             {/* <ThemeToggle /> */}
+            <ModeToggle/>
             <Link to="/login">
               <Button variant="ghost">Login</Button>
             </Link>

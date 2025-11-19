@@ -18,7 +18,7 @@ export async function Authenticated(
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.AUTH_JWT_SECRET!);
+    const decoded = jwt.verify(token, process.env.AUTH_JWT_SECRET!) as Express.UserPayload;
     req.user = decoded;
     next();
   } catch (error) {

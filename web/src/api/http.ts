@@ -25,9 +25,23 @@ export const CreateTask = async (data: TaskData) => {
     return await response.data
 }
 
+export const UpdateTask = async (id:string, data: TaskData) => {
+    const response = await api.post(`/api/v1/task/update/${id}` , data ,{
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
+        },
+    })
+    return await response.data
+}
+
 
 export const GetAllTasks = async () => {
-    const response = await api.get('/api/v1/task/tasks' , {
+    if(!token){
+        return
+    }
+
+    const response = await api.get('/api/v1/task/all' , {
         headers: {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${token}`
@@ -37,7 +51,7 @@ export const GetAllTasks = async () => {
 }
 
 export const GetTask = async (id:string) => {
-    const response = await api.get(`/api/v1/task/task/${id}` , {
+    const response = await api.get(`/api/v1/task/${id}` , {
         headers: {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${token}`

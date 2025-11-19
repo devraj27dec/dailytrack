@@ -3,9 +3,9 @@ import { useAuth } from "@/hooks/useAuth";
 import type { JSX } from "react";
 
 export default function ProtectedRoute({ children }: { children: JSX.Element }) {
-  const { isAuthenticated } = useAuth();
+  const { token  } = useAuth();
 
-  if (!isAuthenticated) {
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
 

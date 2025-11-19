@@ -12,5 +12,5 @@ export const api = axios.create({
 })
 
 export const getAuthToken = () => {
-    return localStorage.getItem('access_token') || null;
+    return sessionStorage.getItem('access_token') || null;
 }

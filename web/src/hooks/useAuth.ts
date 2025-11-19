@@ -4,9 +4,11 @@ import { createContext, useContext } from "react";
 
 interface AuthContextType {
   user: any;
-  isAuthenticated: boolean;
+  // isAuthenticated: boolean;
+  username:string;
   login: (data: LoginCredentials) => Promise<void>;
   logout: () => void;
+  token: string | null;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
